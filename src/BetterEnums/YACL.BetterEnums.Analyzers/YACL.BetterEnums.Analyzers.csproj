@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<!-- Configuración básica para Analyzer -->
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<ProjectType>Analyzers</ProjectType>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+
+		<!-- Identificar como componente de Roslyn -->
+		<IsRoslynComponent>true</IsRoslynComponent>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+
+		<!-- NO generar documentación XML para analyzers -->
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+
+		<!-- NO empaquetar individualmente -->
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<!-- Dependencias del Analyzer (todas con PrivateAssets) -->
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<!-- Incluir archivos de configuración en el output -->
+	<ItemGroup Condition="Exists('build')">
+		<None Include="build\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<GlobalAnalyzerConfigFiles Include="BetterEnums.Rules.globalconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="BetterEnums.Rules.globalconfig" Pack="true" PackagePath="analyzers/dotnet/cs/%(Filename)%(Extension)" />
+	</ItemGroup>
+
+</Project>

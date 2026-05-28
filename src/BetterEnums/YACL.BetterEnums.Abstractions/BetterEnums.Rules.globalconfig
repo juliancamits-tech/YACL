@@ -1,0 +1,4 @@
+is_global = true
+
+# Establecer la regla CA1069 (valores duplicados en enum) como Error
+dotnet_diagnostic.CA1069.severity = error

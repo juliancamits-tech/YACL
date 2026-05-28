@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/BetterEnums/">
+    <Project Path="BetterEnums/YACL.BetterEnums.Abstractions/YACL.BetterEnums.Abstractions.csproj" Id="3efaf2b3-b2f5-4828-b6d5-850be05b66a7" />
+    <Project Path="BetterEnums/YACL.BetterEnums.Analyzers/YACL.BetterEnums.Analyzers.csproj" Id="767eed38-96a5-4686-876e-12a85739fe2d" />
+    <Project Path="BetterEnums/YACL.BetterEnums.Benchmarks/YACL.BetterEnums.Benchmarks.csproj" Id="dc2ee8bc-22d8-4f74-8e70-3667b597114f" />
+    <Project Path="BetterEnums/YACL.BetterEnums.SourceGeneration/YACL.BetterEnums.SourceGeneration.csproj" Id="ec09e31f-7bf6-44c7-a36a-a6057d0dd9ed" />
+    <Project Path="BetterEnums/ConsoleTestApp/ConsoleTestApp.csproj" Id="79fda76b-9a91-442c-bd75-51e271d15305" />
+  </Folder>
+  <Folder Name="/Solution Items/" />
+</Solution>
