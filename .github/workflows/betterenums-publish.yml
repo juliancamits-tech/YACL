@@ -11,17 +11,25 @@ on:
 
 permissions:
      id-token: write
-     contents: read
-
+     contents: write
      
 jobs:
   publish:
-    permissions:
-      id-token: write
-      contents: write
-    uses: juliancamits-tech/YACL/.github/workflows/nuget-publish.yml@main
-    with:
-      project_path: ./src/BetterEnums/YACL.BetterEnums.Abstractions/YACL.BetterEnums.Abstractions.csproj
-      package_id: YACL.BetterEnums
-      run_tests: false
-      test_project_path: ""
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Debug GitHub Context
+        run: |
+            echo "REPOSITORY=$GITHUB_REPOSITORY"
+            echo "WORKFLOW=$GITHUB_WORKFLOW"
+            echo "WORKFLOW_REF=$GITHUB_WORKFLOW_REF"
+            echo "REF=$GITHUB_REF"
+
+      - name: Publish to NuGet
+        uses: juliancamits-tech/YACL/.github/workflows/nuget-publish.yml@main
+        with:
+          project_path: ./src/BetterEnums/YACL.BetterEnums.Abstractions/YACL.BetterEnums.Abstractions.csproj
+          package_id: YACL.BetterEnums
+          run_tests: false
+          test_project_path: ""
