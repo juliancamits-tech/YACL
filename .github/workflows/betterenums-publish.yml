@@ -1,13 +1,9 @@
-name: YACL.BetterEnum.Publish
+name: Test Publish
 
 on:
   push:
     branches:
       - main
-
-    paths:
-      - 'src/BetterEnums/**'
-      - '.github/workflows/betterenums-publish.yml'
 
 permissions:
   id-token: write
@@ -15,10 +11,30 @@ permissions:
 
 jobs:
   publish:
-    uses: juliancamits-tech/YACL/.github/workflows/nuget-publish.yml@main
+    runs-on: ubuntu-latest
 
-    with:
-      project_path: ./src/BetterEnums/YACL.BetterEnums.Abstractions/YACL.BetterEnums.Abstractions.csproj
-      package_id: YACL.BetterEnums
-      run_tests: false
-      test_project_path: ""
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore ./src/BetterEnums/YACL.BetterEnums.Abstractions/YACL.BetterEnums.Abstractions.csproj
+
+      - name: Build
+        run: dotnet build ./src/BetterEnums/YACL.BetterEnums.Abstractions/YACL.BetterEnums.Abstractions.csproj -c Release --no-restore
+
+      - name: Pack
+        run: |
+          dotnet pack ./src/BetterEnums/YACL.BetterEnums.Abstractions/YACL.BetterEnums.Abstractions.csproj \
+            -c Release \
+            --no-build \
+            -o ./nugets
+
+      - name: Push
+        run: |
+          dotnet nuget push "./nugets/*.nupkg" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
