@@ -168,6 +168,17 @@ jobs:
         run: |
           ls -la ${{ env.OUTPUT_PATH }}
 
+      # ===================================================== 
+      # NUGET LOGIN (OIDC) 
+      # ===================================================== 
+      
+      - name: NuGet Login 
+        if: steps.nuget_check.outputs.skip == 'false'
+        id: login
+        uses: NuGet/login@v1 
+        with: 
+          user: JulianCamits
+
       # =====================================================
       # PUBLISH
       # =====================================================
