@@ -9,9 +9,12 @@ MyFirstEnum.FromString("item1");
 
 var workflow = WorkFlow.Pending;
 Console.WriteLine(workflow.ToStringV2());
+
 workflow = workflow.NextStep();
 Console.WriteLine(workflow.ToStringV2());
+
 workflow = workflow.PreviousStep();
 Console.WriteLine(workflow.ToStringV2());
+
 workflow = workflow.ErrorStep();
 Console.WriteLine(workflow.ToStringV2());
