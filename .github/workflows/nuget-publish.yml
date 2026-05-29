@@ -42,6 +42,13 @@ jobs:
       contents: write
 
     steps:
+      - name: Debug GitHub Context
+        run: |
+          echo "REPOSITORY=$GITHUB_REPOSITORY"
+          echo "WORKFLOW=$GITHUB_WORKFLOW"
+          echo "WORKFLOW_REF=$GITHUB_WORKFLOW_REF"
+          echo "REF=$GITHUB_REF"
+
       - name: Checkout
         uses: actions/checkout@v5
 
