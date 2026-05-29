@@ -93,18 +93,6 @@ jobs:
           fi
 
       # =========================
-      # VALIDATE API KEY
-      # =========================
-
-      - name: Validate API Key
-        if: steps.nuget_check.outputs.skip == 'false'
-        run: |
-          if [ -z "${{ secrets.nuget_api_key }}" ]; then
-            echo "NuGet API Key missing"
-            exit 1
-          fi
-
-      # =========================
       # RESTORE
       # =========================
 
