@@ -29,7 +29,10 @@ on:
 permissions:
      id-token: write
      contents: read
-        
+     
+env: 
+  NUGET_EXPERIMENTAL_CHAIN_BUILD_RETRY_POLICY: 9,1000
+  
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -140,6 +143,10 @@ jobs:
       # =========================
       # PUSH
       # =========================
+
+      - name: Login to NuGet 
+        if: steps.nuget_check.outputs.skip == 'false'
+        uses: NuGet/login@v1
 
       - name: Publish
         if: steps.nuget_check.outputs.skip == 'false'
