@@ -12,10 +12,12 @@ on:
 permissions:
      id-token: write
      contents: read
-
-
+     
 jobs:
   publish:
+    permissions:
+      id-token: write
+      contents: write
     uses: juliancamits-tech/YACL/.github/workflows/nuget-publish.yml@main
     with:
       project_path: ./src/BetterEnums/YACL.BetterEnums.Abstractions/YACL.BetterEnums.Abstractions.csproj
