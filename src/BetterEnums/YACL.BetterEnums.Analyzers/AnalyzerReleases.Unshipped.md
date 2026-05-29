@@ -5,6 +5,6 @@
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
+YACLENUM001 | Design | Error | EnumMemberMustHaveExplicitValueAnalyzer
+YACLENUM002 | Design | Error | EnumNullableAnalyzer
 YACLENUM003 | Design | Error | EnumMustHaveNoneValueAnalyzer
-YACLENUMS001 | Design | Error | EnumMemberMustHaveExplicitValueAnalyzer
-YACLENUMS002 | Design | Error | EnumNullableAnalyzer
