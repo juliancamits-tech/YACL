@@ -9,6 +9,11 @@ on:
       - 'src/BetterEnums/**'
       - '.github/workflows/betterenums-publish.yml'
 
+permissions:
+     id-token: write
+     contents: read
+
+
 jobs:
   publish:
     uses: juliancamits-tech/YACL/.github/workflows/nuget-publish.yml@main
