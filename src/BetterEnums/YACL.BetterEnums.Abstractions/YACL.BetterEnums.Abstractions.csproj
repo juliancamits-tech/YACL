@@ -32,7 +32,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageId>YACL.BetterEnums</PackageId>
 		<PackageTags>enum;enums;source-generator;roslyn;analyzer;enum-extensions;performance;compile-time;code-generation;frozen-dictionary;dotnet;csharp</PackageTags>
-		<PackageReadmeFile>YAMCqrs.Core_en.md</PackageReadmeFile>
+		<PackageReadmeFile>YACL.BetterEnums_en.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<!--Source Link para todos los proyectos empaquetables -->
