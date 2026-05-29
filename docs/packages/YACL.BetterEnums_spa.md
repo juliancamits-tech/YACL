@@ -161,6 +161,9 @@ Esto significa que:
 En muchos sistemas, un enum representa estados dentro de un flujo.
 
 La librería permite modelar esas transiciones mediante atributos y generar helpers automáticamente.
+Para lograr eso debemos implementar en los valores que deseamos el atributo `EnumStep` (No es obligatorio implementarlo en todos).
+EnumStep pide como parametros (que pueden ser null) el siguiente item del enum, el anterior y como ultimo cual seria designado como caso de error.
+Esta configuracion simplemente ayudar a programar los metodo de extension para el comportamiento pero la logica de cuando debe ser llamado sigue siendo responsabilidad del desarollador.
 
 ## Definición
 

@@ -1,0 +1,180 @@
+name: Reusable NuGet Publish
+
+on:
+  workflow_call:
+
+    inputs:
+      project_path:
+        required: true
+        type: string
+
+      package_id:
+        required: true
+        type: string
+
+      test_project_path:
+        required: false
+        type: string
+
+      run_tests:
+        required: false
+        type: boolean
+        default: false
+
+      dotnet_version:
+        required: false
+        type: string
+        default: "10.0.x"
+
+permissions:
+     id-token: write
+     contents: read
+        
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet_version }}
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles(inputs.project_path) }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      # =========================
+      # VERSION
+      # =========================
+
+      - name: Extract Version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(grep -oPm1 '(?<=<Version>)[^<]+' "${{ inputs.project_path }}" || \
+          grep -oPm1 '(?<=<VersionPrefix>)[^<]+' "${{ inputs.project_path }}")
+
+          if [ -z "$VERSION" ]; then
+            echo "Version not found"
+            exit 1
+          fi
+
+          echo "current_version=$VERSION" >> $GITHUB_OUTPUT
+
+          echo "Detected version: $VERSION"
+
+      # =========================
+      # NUGET VALIDATION
+      # =========================
+
+      - name: Check if Version Exists
+        id: nuget_check
+        shell: bash
+        run: |
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            https://api.nuget.org/v3-flatcontainer/${{ inputs.package_id }}/${{ steps.version.outputs.current_version }}/index.json)
+
+          if [ "$STATUS_CODE" = "200" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Package already exists"
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      # =========================
+      # VALIDATE API KEY
+      # =========================
+
+      - name: Validate API Key
+        if: steps.nuget_check.outputs.skip == 'false'
+        run: |
+          if [ -z "${{ secrets.nuget_api_key }}" ]; then
+            echo "NuGet API Key missing"
+            exit 1
+          fi
+
+      # =========================
+      # RESTORE
+      # =========================
+
+      - name: Restore
+        if: steps.nuget_check.outputs.skip == 'false'
+        run: |
+          dotnet restore ${{ inputs.project_path }}
+
+      # =========================
+      # TESTS
+      # =========================
+
+      - name: Run Tests
+        if: steps.nuget_check.outputs.skip == 'false' && inputs.run_tests == true
+        run: |
+          dotnet test ${{ inputs.test_project_path }} \
+            --configuration Release \
+            --no-restore
+
+      # =========================
+      # BUILD
+      # =========================
+
+      - name: Build
+        if: steps.nuget_check.outputs.skip == 'false'
+        run: |
+          dotnet build ${{ inputs.project_path }} \
+            -c Release \
+            --no-restore
+
+      # =========================
+      # PACK
+      # =========================
+
+      - name: Pack
+        if: steps.nuget_check.outputs.skip == 'false'
+        run: |
+          dotnet pack ${{ inputs.project_path }} \
+            -c Release \
+            --no-build \
+            -o ./nugets \
+            /p:PackAnalyzers=true \
+            /p:AnalyzerPackagePath="analyzers/dotnet/cs"
+
+      # =========================
+      # PUSH
+      # =========================
+
+      - name: Publish
+        if: steps.nuget_check.outputs.skip == 'false'
+        run: |
+          dotnet nuget push "./nugets/*.nupkg" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+
+      # =========================
+      # TAG
+      # =========================
+
+      - name: Create Tag
+        if: steps.nuget_check.outputs.skip == 'false'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          TAG="v${{ steps.version.outputs.current_version }}"
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag already exists"
+          else
+            git tag "$TAG"
+            git push origin "$TAG"
+          fi

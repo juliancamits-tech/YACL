@@ -1,4 +1,4 @@
-﻿using BetterEnums.YACL.Abstractions.Attributes;
+﻿using YACL.BetterEnums.Abstractions.Attributes;
 
 namespace ConsoleTestApp;
 

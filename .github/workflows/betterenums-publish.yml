@@ -1,0 +1,19 @@
+name: YACL.BetterEnum.Publish
+
+on:
+  push:
+    branches:
+      - main
+    
+    paths:
+      - 'src/BetterEnums/**'
+      - '.github/workflows/betterenums-publish.yml'
+
+jobs:
+  publish:
+    uses: juliancamits-tech/YACL/.github/workflows/nuget-publish.yml@main
+    with:
+      project_path: ./src/BetterEnums/YACL.BetterEnums.Abstractions/YACL.BetterEnums.Abstractions.csproj
+      package_id: YACL.BetterEnums
+      run_tests: false
+      test_project_path: ""

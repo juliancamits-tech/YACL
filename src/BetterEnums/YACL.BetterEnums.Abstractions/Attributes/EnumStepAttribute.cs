@@ -1,4 +1,4 @@
-﻿namespace BetterEnums.YACL.Abstractions.Attributes;
+﻿namespace YACL.BetterEnums.Abstractions.Attributes;
 
 /// <summary>
 /// Specified step names for next, previous, and error transitions.
@@ -19,7 +19,9 @@
 /// </code>
 [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 #pragma warning disable CS9113 // Parameter is unread.
-public class EnumStepAttribute(object? nextStep, object? previousStep, object? errorStep) : Attribute
+#pragma warning disable CA1019 // Define accessors for attribute arguments
+public sealed class EnumStepAttribute(object? nextStep, object? previousStep, object? errorStep) : Attribute
+#pragma warning restore CA1019 // Define accessors for attribute arguments
 #pragma warning restore CS9113 // Parameter is unread.
 {
 }
