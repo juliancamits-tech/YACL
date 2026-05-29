@@ -189,7 +189,7 @@ jobs:
           NUGET_EXPERIMENTAL_CHAIN_BUILD_RETRY_POLICY: 9,1000
         run: |
           dotnet nuget push "${{ env.OUTPUT_PATH }}/*.nupkg" \
-            --source https://api.nuget.org/v3/index.json \
+            --source nuget.org \
             --skip-duplicate
 
       # =====================================================
